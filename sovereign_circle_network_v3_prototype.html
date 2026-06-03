@@ -1,0 +1,875 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --plum-950:#1e0d35;--plum-900:#3b1a5a;--plum-800:#4e2478;--plum-700:#633095;--plum-600:#7a3fb0;--plum-500:#9358c8;--plum-400:#ae7fd9;--plum-300:#c9a8e9;--plum-200:#e2d0f5;--plum-100:#f3eafc;
+  --gold-700:#92721a;--gold-600:#c9a84c;--gold-500:#dfc06a;--gold-400:#ead48a;--gold-300:#f2e4ae;--gold-100:#fdf6e3;
+  --slate-900:#111827;--slate-800:#1f2937;--slate-700:#374151;--slate-600:#4b5563;--slate-400:#9ca3af;--slate-200:#e5e7eb;--slate-100:#f3f4f6;--slate-50:#f9fafb;
+  --c-bg:#faf9fb;--c-surface:#fff;--c-border:#e2daf0;--c-border-sub:#ede8f5;
+  --text-brand:#3b1a5a;--text-sec:#4b5563;--text-muted:#9ca3af;
+  --success:#059669;--error:#dc2626;--warning:#d97706;
+  --font-display:'Cormorant Garamond',Georgia,serif;
+  --font-body:'DM Sans',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --shadow-md:0 4px 12px rgba(59,26,90,.10);
+  --shadow-lg:0 8px 24px rgba(59,26,90,.14);
+  --r-md:8px;--r-lg:12px;--r-xl:16px;--r-2xl:24px;--r-full:9999px;
+  --t:200ms cubic-bezier(.4,0,.2,1);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-body);background:var(--c-bg);color:var(--slate-900);-webkit-font-smoothing:antialiased;}
+
+.shell{display:flex;min-height:600px;background:var(--c-bg);border-radius:var(--r-2xl);overflow:hidden;box-shadow:var(--shadow-lg);border:1px solid var(--c-border);}
+
+/* SIDEBAR */
+.sidebar{width:220px;min-width:220px;background:var(--plum-950);display:flex;flex-direction:column;overflow:hidden;}
+.sidebar-logo{display:flex;align-items:center;gap:10px;padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.06);}
+.logo-mark svg{width:32px;height:32px;}
+.logo-text{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--gold-400);line-height:1.2;}
+.logo-text em{font-style:italic;color:var(--plum-300);}
+.sidebar-nav{flex:1;display:flex;flex-direction:column;gap:2px;padding:12px 10px;overflow-y:auto;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--r-lg);color:rgba(255,255,255,.5);font-size:13px;font-weight:500;cursor:pointer;transition:all var(--t);position:relative;user-select:none;}
+.nav-item:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.85);}
+.nav-item.active{background:rgba(201,168,76,.12);color:var(--gold-400);font-weight:600;}
+.nav-item.active::before{content:'';position:absolute;left:0;top:22%;bottom:22%;width:3px;background:var(--gold-600);border-radius:0 var(--r-full) var(--r-full) 0;}
+.nav-icon{width:18px;height:18px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.nav-badge{margin-left:auto;background:var(--gold-600);color:var(--slate-900);font-size:10px;font-weight:700;padding:1px 6px;border-radius:var(--r-full);}
+.sidebar-user{display:flex;align-items:center;gap:10px;padding:14px 14px;border-top:1px solid rgba(255,255,255,.06);}
+.user-avatar{width:36px;height:36px;border-radius:var(--r-full);background:#3b1a5a;border:2px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--gold-400);flex-shrink:0;}
+.user-info{overflow:hidden;}
+.user-name{font-size:12px;font-weight:600;color:rgba(255,255,255,.9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.user-plan{margin-top:3px;}
+.plan-badge{font-size:10px;font-weight:700;padding:1px 7px;border-radius:var(--r-full);background:rgba(201,168,76,.15);color:var(--gold-400);text-transform:uppercase;letter-spacing:.04em;}
+
+/* MAIN */
+.main-wrapper{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;}
+.topbar{height:56px;display:flex;align-items:center;gap:12px;padding:0 20px;background:var(--c-surface);border-bottom:1px solid var(--c-border-sub);flex-shrink:0;}
+.topbar-title{font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--text-brand);flex:1;}
+.topbar-title em{font-style:italic;color:var(--plum-600);}
+.topbar-actions{display:flex;align-items:center;gap:8px;}
+.icon-btn{width:36px;height:36px;border-radius:var(--r-md);border:none;background:transparent;color:var(--text-sec);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--t);position:relative;}
+.icon-btn:hover{background:var(--slate-100);color:var(--slate-900);}
+.notif-dot{position:absolute;top:7px;right:7px;width:7px;height:7px;border-radius:var(--r-full);background:var(--error);border:2px solid var(--c-surface);}
+.main-content{flex:1;overflow-y:auto;padding:20px;}
+
+/* TABS */
+.tabs{display:flex;gap:4px;margin-bottom:20px;background:var(--c-surface);border:1px solid var(--c-border-sub);border-radius:var(--r-xl);padding:4px;width:fit-content;}
+.tab{padding:7px 16px;border-radius:var(--r-lg);font-size:13px;font-weight:500;color:var(--text-sec);cursor:pointer;transition:all var(--t);white-space:nowrap;border:none;background:transparent;}
+.tab:hover{color:var(--slate-900);}
+.tab.active{background:var(--plum-900);color:#fff;font-weight:600;}
+
+/* SECTION */
+.section-title{font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--text-brand);margin-bottom:4px;}
+.section-sub{font-size:13px;color:var(--text-sec);margin-bottom:16px;}
+
+/* STAT GRID */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.stat-card{background:var(--c-surface);border:1px solid var(--c-border-sub);border-radius:var(--r-xl);padding:16px;transition:box-shadow var(--t);}
+.stat-card:hover{box-shadow:var(--shadow-md);}
+.stat-card.gold{background:linear-gradient(135deg,var(--plum-900) 0%,var(--plum-800) 100%);border-color:transparent;}
+.stat-value{font-family:var(--font-display);font-size:26px;font-weight:700;color:var(--text-brand);display:block;line-height:1;}
+.stat-card.gold .stat-value{color:var(--gold-400);}
+.stat-label{font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-top:6px;display:block;}
+.stat-card.gold .stat-label{color:rgba(255,255,255,.5);}
+.stat-delta{font-size:12px;font-weight:600;margin-top:2px;display:block;}
+.delta-up{color:var(--success);}
+.delta-down{color:var(--error);}
+
+/* CONTENT GRID */
+.content-grid{display:grid;grid-template-columns:1fr 280px;gap:16px;}
+.content-left{display:flex;flex-direction:column;gap:14px;}
+.content-right{display:flex;flex-direction:column;gap:14px;}
+
+/* CARD */
+.card{background:var(--c-surface);border:1px solid var(--c-border-sub);border-radius:var(--r-xl);padding:16px;box-shadow:0 1px 3px rgba(59,26,90,.05);}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.card-title{font-family:var(--font-display);font-size:17px;font-weight:700;color:var(--text-brand);}
+.see-all{font-size:12px;font-weight:600;color:var(--plum-600);cursor:pointer;transition:color var(--t);}
+.see-all:hover{color:var(--plum-900);}
+
+/* BARTER ITEMS */
+.barter-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--c-border-sub);}
+.barter-item:last-child{border-bottom:none;padding-bottom:0;}
+.barter-avatar{width:36px;height:36px;border-radius:var(--r-full);border:2px solid var(--c-border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
+.barter-body{flex:1;min-width:0;}
+.barter-meta{display:flex;align-items:center;gap:6px;margin-bottom:3px;}
+.barter-name{font-size:13px;font-weight:600;color:var(--slate-900);}
+.verified-mark{width:14px;height:14px;background:var(--plum-900);border-radius:var(--r-full);display:inline-flex;align-items:center;justify-content:center;font-size:8px;color:#fff;font-weight:700;}
+.barter-time{font-size:11px;color:var(--text-muted);margin-left:auto;}
+.barter-offering{font-size:12px;color:var(--text-sec);margin-bottom:4px;line-height:1.4;}
+.barter-seeking{font-size:12px;color:var(--plum-700);font-weight:500;}
+.tag-row{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px;}
+.tag{font-size:10px;padding:2px 8px;border-radius:var(--r-full);background:var(--plum-100);color:var(--plum-800);font-weight:600;}
+.tag.gold{background:var(--gold-100);color:var(--gold-700);}
+
+/* JOB ITEMS */
+.job-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--c-border-sub);}
+.job-item:last-child{border-bottom:none;padding-bottom:0;}
+.company-logo{width:36px;height:36px;border-radius:var(--r-md);background:var(--plum-100);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--plum-800);flex-shrink:0;border:1px solid var(--c-border);}
+.job-info{flex:1;min-width:0;}
+.job-title{font-size:13px;font-weight:600;color:var(--slate-900);}
+.job-company{font-size:12px;color:var(--text-sec);}
+.job-salary{font-size:12px;font-weight:600;color:var(--plum-700);}
+.job-meta{display:flex;align-items:center;gap:6px;margin-top:3px;}
+.job-tag{font-size:10px;padding:2px 7px;border-radius:var(--r-full);background:var(--slate-100);color:var(--slate-700);font-weight:600;}
+.job-tag.ref{background:var(--gold-100);color:var(--gold-700);}
+.apply-btn{flex-shrink:0;font-size:12px;font-weight:600;padding:5px 12px;border-radius:var(--r-lg);background:var(--plum-900);color:#fff;border:none;cursor:pointer;transition:all var(--t);}
+.apply-btn:hover{background:var(--plum-800);transform:translateY(-1px);}
+
+/* TRUST SCORE */
+.trust-section{display:flex;flex-direction:column;gap:10px;}
+.trust-header{display:flex;align-items:center;gap:10px;}
+.trust-gauge{position:relative;flex-shrink:0;}
+.trust-number{font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--gold-600);}
+.trust-tier{font-size:11px;font-weight:700;color:var(--gold-600);text-transform:uppercase;letter-spacing:.07em;}
+.trust-breakdown{display:flex;flex-direction:column;gap:6px;}
+.trust-row{display:flex;align-items:center;gap:8px;}
+.trust-row-label{font-size:11px;color:var(--text-sec);flex:1;font-weight:500;}
+.trust-bar-track{flex:2;height:5px;background:var(--slate-200);border-radius:var(--r-full);overflow:hidden;}
+.trust-bar-fill{height:100%;border-radius:var(--r-full);transition:width 1s cubic-bezier(.34,1.56,.64,1);}
+.trust-row-pts{font-size:11px;font-weight:600;color:var(--text-muted);min-width:24px;text-align:right;}
+
+/* ECONOMIC LEDGER */
+.ledger-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.ledger-ticker{background:var(--slate-50);border:1px solid var(--c-border-sub);border-radius:var(--r-lg);padding:10px 12px;}
+.ledger-ticker.accent{background:linear-gradient(135deg,var(--plum-100) 0%,var(--c-surface) 100%);border-color:var(--plum-200);}
+.ledger-val{font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--slate-800);line-height:1;}
+.ledger-ticker.accent .ledger-val{color:var(--plum-900);}
+.ledger-lbl{font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-top:4px;}
+.live-indicator{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--success);font-weight:700;margin-bottom:10px;}
+.live-dot{width:7px;height:7px;border-radius:var(--r-full);background:var(--success);animation:lp 2s ease-in-out infinite;}
+@keyframes lp{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* SIBYL CIRCLES */
+.circle-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--c-border-sub);}
+.circle-item:last-child{border-bottom:none;padding-bottom:0;}
+.circle-icon{width:32px;height:32px;border-radius:var(--r-lg);background:linear-gradient(135deg,var(--plum-900),var(--plum-800));display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.circle-icon svg{width:16px;height:16px;}
+.circle-info{flex:1;min-width:0;}
+.circle-name{font-size:13px;font-weight:600;color:var(--slate-900);}
+.circle-sub{font-size:11px;color:var(--text-sec);}
+.circle-seats{font-size:11px;font-weight:600;color:var(--plum-600);flex-shrink:0;}
+.join-btn{font-size:11px;font-weight:600;padding:4px 10px;border-radius:var(--r-lg);background:transparent;color:var(--plum-900);border:1.5px solid var(--plum-300);cursor:pointer;transition:all var(--t);margin-left:6px;}
+.join-btn:hover{background:var(--plum-50);border-color:var(--plum-500);}
+
+/* NOTIFICATIONS PANEL */
+.notif-panel{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-xl);box-shadow:var(--shadow-lg);padding:0;overflow:hidden;position:absolute;top:56px;right:20px;width:320px;z-index:100;animation:sld .2s both;}
+@keyframes sld{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.notif-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--c-border-sub);}
+.notif-h-title{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--text-brand);}
+.notif-list{padding:8px 0;max-height:280px;overflow-y:auto;}
+.notif-item{display:flex;align-items:flex-start;gap:10px;padding:10px 16px;cursor:pointer;transition:background var(--t);}
+.notif-item:hover{background:var(--plum-100);}
+.notif-item.unread{background:rgba(122,63,176,.04);}
+.notif-ico-wrap{width:32px;height:32px;border-radius:var(--r-lg);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;}
+.notif-body{flex:1;min-width:0;}
+.notif-msg{font-size:12px;color:var(--slate-900);line-height:1.4;}
+.notif-time{font-size:10px;color:var(--text-muted);margin-top:2px;}
+.unread-pip{width:7px;height:7px;border-radius:var(--r-full);background:var(--plum-600);flex-shrink:0;margin-top:5px;}
+.notif-footer{padding:10px 16px;border-top:1px solid var(--c-border-sub);text-align:center;}
+.notif-footer a{font-size:12px;font-weight:600;color:var(--plum-700);cursor:pointer;}
+
+/* WIZARD */
+.wizard-wrap{position:absolute;inset:0;background:rgba(10,6,20,.7);display:flex;align-items:center;justify-content:center;z-index:200;border-radius:var(--r-2xl);padding:20px;}
+.wizard-card{background:var(--c-surface);border-radius:var(--r-2xl);width:460px;max-height:90%;overflow-y:auto;box-shadow:var(--shadow-lg);}
+.wiz-header{padding:20px 24px 14px;border-bottom:1px solid var(--c-border-sub);background:linear-gradient(135deg,var(--plum-100) 0%,var(--c-surface) 100%);}
+.wiz-title{font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--plum-900);margin-bottom:2px;}
+.wiz-sub{font-size:12px;color:var(--text-muted);}
+.wiz-dots{display:flex;gap:6px;margin-top:10px;}
+.wiz-dot{width:8px;height:8px;border-radius:var(--r-full);background:var(--slate-200);transition:all var(--t);}
+.wiz-dot.on{background:var(--gold-600);box-shadow:0 0 0 3px rgba(201,168,76,.2);}
+.wiz-body{padding:20px 24px;display:flex;flex-direction:column;gap:14px;}
+.wiz-step-title{font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--plum-900);}
+.form-group{display:flex;flex-direction:column;gap:5px;}
+.form-label{font-size:13px;font-weight:600;color:var(--slate-900);}
+.form-input,.form-textarea{width:100%;padding:9px 12px;border:1.5px solid var(--c-border);border-radius:var(--r-lg);background:var(--c-surface);color:var(--slate-900);font-family:var(--font-body);font-size:14px;outline:none;transition:border-color var(--t);resize:none;}
+.form-input:focus,.form-textarea:focus{border-color:var(--plum-500);box-shadow:0 0 0 3px rgba(122,63,176,.1);}
+.tag-cloud{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;}
+.tag-chip{padding:6px 12px;border-radius:var(--r-full);font-size:12px;font-weight:500;border:1.5px solid var(--c-border);background:var(--c-surface);color:var(--text-sec);cursor:pointer;transition:all var(--t);user-select:none;}
+.tag-chip:hover{border-color:var(--plum-400);color:var(--plum-800);background:var(--plum-100);}
+.tag-chip.sel{background:var(--plum-900);border-color:var(--plum-900);color:#fff;}
+.wiz-footer{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-top:1px solid var(--c-border-sub);background:var(--slate-50);}
+.btn-ghost{padding:8px 16px;border-radius:var(--r-lg);border:none;background:transparent;color:var(--text-sec);font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font-body);}
+.btn-ghost:hover{background:var(--slate-200);}
+.btn-primary{padding:9px 20px;border-radius:var(--r-lg);border:none;background:var(--plum-900);color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-body);transition:all var(--t);}
+.btn-primary:hover{background:var(--plum-800);transform:translateY(-1px);}
+.complete-screen{padding:32px 24px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;}
+.complete-mark{animation:pop .5s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes pop{from{opacity:0;transform:scale(0.5)}to{opacity:1;transform:scale(1)}}
+.complete-title{font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--plum-900);}
+.complete-sub{font-size:14px;color:var(--text-sec);}
+.book-cta{background:linear-gradient(135deg,var(--plum-900) 0%,var(--plum-800) 100%);border-radius:var(--r-xl);padding:16px;display:flex;gap:14px;align-items:center;width:100%;text-align:left;}
+.book-face{width:70px;height:100px;background:linear-gradient(160deg,var(--plum-800) 0%,var(--plum-950) 100%);border-radius:4px;display:flex;flex-direction:column;justify-content:flex-end;padding:8px;border:1px solid rgba(201,168,76,.3);box-shadow:3px 3px 12px rgba(0,0,0,.4);flex-shrink:0;}
+.book-tit{font-family:var(--font-display);font-size:8px;font-weight:700;color:var(--gold-400);text-transform:uppercase;letter-spacing:.05em;line-height:1.3;}
+.book-auth{font-size:6px;color:rgba(255,255,255,.35);margin-top:6px;font-family:var(--font-body);}
+.book-info{flex:1;}
+.book-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:var(--r-full);background:rgba(201,168,76,.2);color:var(--gold-400);margin-bottom:6px;display:inline-block;}
+.book-headline{font-family:var(--font-display);font-size:16px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:4px;}
+.book-desc{font-size:11px;color:rgba(255,255,255,.6);line-height:1.5;margin-bottom:10px;}
+.btn-gold{padding:8px 16px;border-radius:var(--r-lg);border:none;background:var(--gold-600);color:var(--slate-900);font-size:12px;font-weight:700;cursor:pointer;transition:all var(--t);}
+.btn-gold:hover{background:var(--gold-500);transform:translateY(-1px);}
+
+/* DEMO CONTROLS */
+.demo-bar{background:rgba(59,26,90,.06);border:1px solid var(--plum-200);border-radius:var(--r-xl);padding:8px 14px;display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+.demo-label{font-size:11px;font-weight:700;color:var(--plum-700);text-transform:uppercase;letter-spacing:.06em;}
+.demo-btn{padding:5px 12px;border-radius:var(--r-lg);border:1.5px solid var(--plum-300);background:transparent;color:var(--plum-800);font-size:12px;font-weight:600;cursor:pointer;transition:all var(--t);font-family:var(--font-body);}
+.demo-btn:hover{background:var(--plum-100);border-color:var(--plum-500);}
+.demo-btn.on{background:var(--plum-900);color:#fff;border-color:var(--plum-900);}
+</style>
+
+<h2 class="sr-only">Sovereign Circle Network v3 — Interactive UI Prototype</h2>
+
+<div class="shell" id="shell" style="position:relative;min-height:640px;">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="18" fill="#3B1A5A"/><path d="M18 7 L21.5 14.5 L30 15.5 L24 21.5 L25.5 30 L18 26 L10.5 30 L12 21.5 L6 15.5 L14.5 14.5 Z" fill="#C9A84C"/></svg>
+      </div>
+      <div class="logo-text">Sovereign<br><em>Circle</em></div>
+    </div>
+    <div class="sidebar-nav" id="sidebarNav">
+      <div class="nav-item active" data-view="dashboard">
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></span>
+        Dashboard
+      </div>
+      <div class="nav-item" data-view="barter">
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/><path d="m7 14 3-3 3 3 4-4"/></svg></span>
+        Barter Hub
+        <span class="nav-badge">3</span>
+      </div>
+      <div class="nav-item" data-view="jobs">
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></span>
+        Job Board
+      </div>
+      <div class="nav-item" data-view="career">
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span>
+        Career Tools
+      </div>
+      <div class="nav-item" data-view="sibyl">
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0 1 12 0v2"/><path d="M18 8a4 4 0 0 1 0 8"/><path d="M6 8a4 4 0 0 0 0 8"/></svg></span>
+        Sibyl Circles
+      </div>
+      <div class="nav-item" data-view="incubator">
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+        Incubator
+      </div>
+      <div class="nav-item" style="opacity:.45;">
+        <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span>
+        Corporate
+        <svg style="margin-left:auto;width:12px;height:12px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+    </div>
+    <div class="sidebar-user">
+      <div class="user-avatar" style="background:#3b1a5a;">SA</div>
+      <div class="user-info">
+        <div class="user-name">Shemmyla A. Green</div>
+        <div class="user-plan"><span class="plan-badge">Founder</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main-wrapper">
+    <div class="topbar">
+      <div class="topbar-title" id="topbarTitle">Dashboard</div>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="bellBtn" title="Notifications">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="notif-dot"></span>
+        </button>
+        <button class="icon-btn" id="profileBtn" title="Profile">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M6 20v-1a6 6 0 0 1 12 0v1"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="main-content" id="mainContent">
+      <!-- injected by JS -->
+    </div>
+  </div>
+
+  <!-- NOTIFICATION PANEL (hidden) -->
+  <div class="notif-panel" id="notifPanel" style="display:none;">
+    <div class="notif-header">
+      <span class="notif-h-title">Notifications</span>
+      <span style="font-size:11px;font-weight:600;color:var(--success);">All caught up</span>
+    </div>
+    <div class="notif-list">
+      <div class="notif-item unread">
+        <div class="notif-ico-wrap" style="background:rgba(201,168,76,.15);">✦</div>
+        <div class="notif-body"><div class="notif-msg">Your Sovereign Trust Score updated to <strong>82</strong> — Elite tier reached.</div><div class="notif-time">2 min ago</div></div>
+        <div class="unread-pip"></div>
+      </div>
+      <div class="notif-item unread">
+        <div class="notif-ico-wrap" style="background:rgba(122,63,176,.1);">⇄</div>
+        <div class="notif-body"><div class="notif-msg"><strong>Dr. Renata M.</strong> sent a connect request on your barter post.</div><div class="notif-time">14 min ago</div></div>
+        <div class="unread-pip"></div>
+      </div>
+      <div class="notif-item">
+        <div class="notif-ico-wrap" style="background:rgba(5,150,105,.1);">💼</div>
+        <div class="notif-body"><div class="notif-msg">New job lead: <strong>Senior PM</strong> at Booz Allen — $145K · Defense &amp; Aerospace · Referral available.</div><div class="notif-time">1h ago</div></div>
+      </div>
+      <div class="notif-item">
+        <div class="notif-ico-wrap" style="background:rgba(122,63,176,.08);">⬡</div>
+        <div class="notif-body"><div class="notif-msg"><strong>Sovereign Strategy Cohort</strong> has 2 seats remaining — applications close Friday.</div><div class="notif-time">3h ago</div></div>
+      </div>
+    </div>
+    <div class="notif-footer"><a>View all notifications →</a></div>
+  </div>
+
+  <!-- ONBOARDING WIZARD (hidden) -->
+  <div class="wizard-wrap" id="wizardWrap" style="display:none;">
+    <div class="wizard-card" id="wizardCard"><!-- injected --></div>
+  </div>
+</div>
+
+<script>
+const views = {
+  dashboard: renderDashboard,
+  barter: renderBarter,
+  jobs: renderJobs,
+  career: renderCareer,
+  sibyl: renderSibyl,
+  incubator: renderIncubator
+};
+
+let currentView = 'dashboard';
+let notifOpen = false;
+let wizStep = 1;
+let selSkills = ['Program Management','Federal Contracting'];
+let selIndustries = ['Government','Defense & Aerospace'];
+
+function $(id){ return document.getElementById(id); }
+
+function navigateTo(view) {
+  currentView = view;
+  document.querySelectorAll('.nav-item').forEach(n => {
+    n.classList.toggle('active', n.dataset.view === view);
+  });
+  const titles = {dashboard:'Dashboard',barter:'Barter Hub',jobs:'Job Board',career:'Career Tools',sibyl:'Sibyl Circles',incubator:'Incubator'};
+  $('topbarTitle').textContent = titles[view] || view;
+  closeNotif();
+  render();
+}
+
+function render() {
+  if (views[currentView]) views[currentView]();
+}
+
+function closeNotif() {
+  notifOpen = false;
+  $('notifPanel').style.display = 'none';
+}
+
+// BELL
+$('bellBtn').addEventListener('click', e => {
+  e.stopPropagation();
+  notifOpen = !notifOpen;
+  $('notifPanel').style.display = notifOpen ? 'block' : 'none';
+});
+document.addEventListener('click', e => {
+  if (notifOpen && !$('notifPanel').contains(e.target) && !$('bellBtn').contains(e.target)) {
+    closeNotif();
+  }
+});
+
+// PROFILE BUTTON → open wizard
+$('profileBtn').addEventListener('click', () => openWizard());
+
+// NAV
+$('sidebarNav').addEventListener('click', e => {
+  const item = e.target.closest('.nav-item[data-view]');
+  if (item && item.dataset.view && item.dataset.view !== 'corporate') {
+    navigateTo(item.dataset.view);
+  }
+});
+
+// ── VIEWS ─────────────────────────────────────────────────────────────────
+
+function renderDashboard() {
+  $('mainContent').innerHTML = `
+    <div class="demo-bar">
+      <span class="demo-label">✦ Prototype</span>
+      <button class="demo-btn on" onclick="navigateTo('dashboard')">Dashboard</button>
+      <button class="demo-btn" onclick="openWizard()">Onboarding Wizard</button>
+      <button class="demo-btn" onclick="navigateTo('barter')">Barter Hub</button>
+      <button class="demo-btn" onclick="navigateTo('jobs')">Job Board</button>
+      <button class="demo-btn" onclick="navigateTo('sibyl')">Sibyl Circles</button>
+    </div>
+    <div class="section-title">Welcome back, Shemmyla ✦</div>
+    <div class="section-sub">Your ecosystem at a glance — June 3, 2026</div>
+    <div class="stat-grid">
+      <div class="stat-card gold">
+        <span class="stat-value">82</span>
+        <span class="stat-label">Trust Score</span>
+        <span class="stat-delta" style="color:var(--gold-400);font-size:11px;">Elite Tier ✦</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value">147</span>
+        <span class="stat-label">Active Members</span>
+        <span class="stat-delta delta-up">+12 this month</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value">$2.4M</span>
+        <span class="stat-label">Pipeline Value</span>
+        <span class="stat-delta delta-up">+$380K active</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value">34</span>
+        <span class="stat-label">Open Barters</span>
+        <span class="stat-delta" style="color:var(--text-muted);">3 new matches</span>
+      </div>
+    </div>
+    <div class="content-grid">
+      <div class="content-left">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Recent Barter Activity</span>
+            <span class="see-all" onclick="navigateTo('barter')">View all →</span>
+          </div>
+          ${barterItemsHTML()}
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Featured Job Leads</span>
+            <span class="see-all" onclick="navigateTo('jobs')">View all →</span>
+          </div>
+          ${jobItemsHTML(2)}
+        </div>
+      </div>
+      <div class="content-right">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Your Trust Score</span>
+          </div>
+          <div class="trust-section">
+            <div class="trust-header">
+              <svg width="72" height="72" viewBox="0 0 72 72" id="trustSvg">
+                <defs>
+                  <linearGradient id="tg" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#7A3FB0"/>
+                    <stop offset="100%" stop-color="#C9A84C"/>
+                  </linearGradient>
+                </defs>
+                <circle cx="36" cy="36" r="30" stroke="#e2daf0" stroke-width="5" fill="none"/>
+                <circle cx="36" cy="36" r="30" stroke="url(#tg)" stroke-width="5" fill="none" stroke-linecap="round"
+                  stroke-dasharray="${2*Math.PI*30}" stroke-dashoffset="${2*Math.PI*30*(1-82/100)}"
+                  transform="rotate(-90 36 36)" id="trustArc"/>
+                <text x="36" y="40" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="18" font-weight="700" fill="#C9A84C">82</text>
+              </svg>
+              <div>
+                <div class="trust-number">Elite</div>
+                <div class="trust-tier">Tier 4 of 5</div>
+              </div>
+            </div>
+            <div class="trust-breakdown">
+              ${trustRow('Barters completed',25,25,'#7a3fb0')}
+              ${trustRow('Teaming agreements',17,25,'#9358c8')}
+              ${trustRow('Executed MOUs',20,20,'#c9a84c')}
+              ${trustRow('Verification',15,15,'#c9a84c')}
+              ${trustRow('Account tenure',4,10,'#9ca3af')}
+              ${trustRow('Activity signal',1,5,'#9ca3af')}
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="live-indicator">
+            <span class="live-dot"></span>
+            Live Ecosystem
+          </div>
+          <div class="ledger-grid">
+            <div class="ledger-ticker accent"><div class="ledger-val">24</div><div class="ledger-lbl">Open roles</div></div>
+            <div class="ledger-ticker accent"><div class="ledger-val">$2.4M</div><div class="ledger-lbl">Pipeline ceiling</div></div>
+            <div class="ledger-ticker"><div class="ledger-val">189</div><div class="ledger-lbl">Roles filled</div></div>
+            <div class="ledger-ticker"><div class="ledger-val">63</div><div class="ledger-lbl">Referral-backed</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Sibyl Circles</span>
+            <span class="see-all" onclick="navigateTo('sibyl')">Explore →</span>
+          </div>
+          ${sibylItemsHTML(3)}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function trustRow(label, score, max, color) {
+  return `<div class="trust-row">
+    <span class="trust-row-label">${label}</span>
+    <div class="trust-bar-track"><div class="trust-bar-fill" style="width:${(score/max)*100}%;background:${color};"></div></div>
+    <span class="trust-row-pts">${score}/${max}</span>
+  </div>`;
+}
+
+function barterItemsHTML(count) {
+  const items = [
+    {init:'RM',color:'#4e2478',name:'Dr. Renata M.',verified:true,time:'2h ago',offering:'Clinical research design + IRB navigation',seeking:'SaaS product strategy for health-tech pivot',tags:['Healthcare','Product Mgmt']},
+    {init:'JB',color:'#633095',name:'Jordan Baptiste',verified:true,time:'5h ago',offering:'Full-stack engineering — React + Supabase',seeking:'Federal contracting BD strategy',tags:['Tech Build','Federal Contracting']},
+    {init:'AS',color:'#92721a',name:'Amara Singh',verified:false,time:'1d ago',offering:'UX/UI design — 10yr SaaS experience',seeking:'Business development partner — GovTech',tags:['Design','Government']},
+  ];
+  return items.slice(0,count||3).map(i=>`
+    <div class="barter-item">
+      <div class="barter-avatar" style="background:${i.color};color:${i.color==='#92721a'?'var(--gold-400)':'var(--plum-300)'}">${i.init}</div>
+      <div class="barter-body">
+        <div class="barter-meta">
+          <span class="barter-name">${i.name}</span>
+          ${i.verified?'<span class="verified-mark">✓</span>':''}
+          <span class="barter-time">${i.time}</span>
+        </div>
+        <div class="barter-offering"><strong>Offering:</strong> ${i.offering}</div>
+        <div class="barter-seeking"><strong>Seeking:</strong> ${i.seeking}</div>
+        <div class="tag-row">${i.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      </div>
+    </div>`).join('');
+}
+
+function jobItemsHTML(count) {
+  const jobs = [
+    {co:'BAH',title:'Sr. Program Manager',company:'Booz Allen Hamilton',loc:'Remote / DC',sal:'$125K–$155K',tags:['Federal','Cleared'],ref:true},
+    {co:'L3T',title:'Technical PM — Defense',company:'L3 Technologies',loc:'Huntsville, AL',sal:'$110K–$145K',tags:['Defense','TS/SCI'],ref:false},
+    {co:'EFN',title:'AI Strategy Lead',company:'Empowerment Firm LLC',loc:'Remote',sal:'$95K–$130K',tags:['AI/ML','Strategy'],ref:true},
+  ];
+  return jobs.slice(0,count||3).map(j=>`
+    <div class="job-item">
+      <div class="company-logo">${j.co}</div>
+      <div class="job-info">
+        <div class="job-title">${j.title}</div>
+        <div class="job-company">${j.company} · ${j.loc}</div>
+        <div class="job-meta">
+          <span class="job-salary">${j.sal}</span>
+          ${j.tags.map(t=>`<span class="job-tag">${t}</span>`).join('')}
+          ${j.ref?'<span class="job-tag ref">Referral ✦</span>':''}
+        </div>
+      </div>
+      <button class="apply-btn">Apply</button>
+    </div>`).join('');
+}
+
+function sibylItemsHTML(count) {
+  const circles = [
+    {name:'Sovereign Strategy Cohort',sub:'BD + Federal Contracting · 12 seats',seats:'2 left'},
+    {name:'GovTech Accountability Circle',sub:'Accountability · 8 seats',seats:'5 left'},
+    {name:'AI Founders Lab',sub:'Open Lab · 20 seats',seats:'Open'},
+  ];
+  return circles.slice(0,count).map(c=>`
+    <div class="circle-item">
+      <div class="circle-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#c9a8e9" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0 1 12 0v2"/></svg>
+      </div>
+      <div class="circle-info">
+        <div class="circle-name">${c.name}</div>
+        <div class="circle-sub">${c.sub}</div>
+      </div>
+      <span class="circle-seats">${c.seats}</span>
+      <button class="join-btn">Apply</button>
+    </div>`).join('');
+}
+
+function renderBarter() {
+  $('mainContent').innerHTML = `
+    <div class="demo-bar">
+      <span class="demo-label">✦ Prototype</span>
+      <button class="demo-btn" onclick="navigateTo('dashboard')">Dashboard</button>
+      <button class="demo-btn on">Barter Hub</button>
+      <button class="demo-btn" onclick="navigateTo('jobs')">Job Board</button>
+    </div>
+    <div class="section-title">Barter Hub</div>
+    <div class="section-sub">Exchange expertise. Build sovereign equity.</div>
+    <div style="display:flex;gap:12px;margin-bottom:14px;">
+      <button class="btn-primary" onclick="openBarterForm()">+ New Post</button>
+      <div style="flex:1;background:var(--c-surface);border:1.5px solid var(--c-border);border-radius:var(--r-xl);display:flex;align-items:center;padding:0 12px;gap:8px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input placeholder="Search members, skills, posts…" style="border:none;outline:none;background:transparent;flex:1;font-size:13px;font-family:var(--font-body);color:var(--slate-900);padding:9px 0;" />
+      </div>
+    </div>
+    <div class="card">${barterItemsHTML(3)}</div>
+    <div id="barterFormArea"></div>
+  `;
+}
+
+function openBarterForm() {
+  $('barterFormArea').innerHTML = `
+    <div class="card" style="margin-top:14px;border:1.5px solid var(--plum-300);">
+      <div class="card-header">
+        <span class="card-title">New Barter Post</span>
+        <span class="see-all" onclick="$('barterFormArea').innerHTML=''">✕ Cancel</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div class="form-group">
+          <label class="form-label">What I'm offering <span style="color:var(--error)">*</span></label>
+          <textarea class="form-textarea" rows="3" placeholder="Describe your expertise, experience, and what you can deliver…"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">What I'm seeking <span style="color:var(--error)">*</span></label>
+          <textarea class="form-textarea" rows="3" placeholder="Be specific — quality matches come from clear asks…"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tags</label>
+          <div class="tag-cloud">
+            ${['Federal Contracting','Program Management','Legal Review','Tech Build','Design','Marketing','Financial Analysis','Grant Writing'].map(t=>`<span class="tag-chip" onclick="this.classList.toggle('sel')">${t}</span>`).join('')}
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:8px;padding-top:4px;">
+          <button class="btn-ghost" onclick="$('barterFormArea').innerHTML=''">Cancel</button>
+          <button class="btn-primary" onclick="submitBarter()">Post to Community</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function submitBarter() {
+  $('barterFormArea').innerHTML = `
+    <div class="card" style="margin-top:14px;text-align:center;padding:32px;border:1.5px solid var(--plum-300);">
+      <div style="font-size:28px;color:var(--gold-600);animation:pop .5s both;">✦</div>
+      <div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--plum-900);margin-top:8px;">Post live.</div>
+      <div style="font-size:13px;color:var(--text-sec);margin-top:4px;">Your barter post is now visible to the community.</div>
+    </div>`;
+}
+
+function renderJobs() {
+  $('mainContent').innerHTML = `
+    <div class="demo-bar">
+      <span class="demo-label">✦ Prototype</span>
+      <button class="demo-btn" onclick="navigateTo('dashboard')">Dashboard</button>
+      <button class="demo-btn" onclick="navigateTo('barter')">Barter Hub</button>
+      <button class="demo-btn on">Job Board</button>
+    </div>
+    <div class="section-title">Job Board</div>
+    <div class="section-sub">Federal contracts, private sector leads, and referral-backed opportunities.</div>
+    <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+      <button class="demo-btn on">All (24)</button>
+      <button class="demo-btn">Federal (14)</button>
+      <button class="demo-btn">Defense (6)</button>
+      <button class="demo-btn">Referral ✦ (8)</button>
+      <button class="demo-btn">Remote (9)</button>
+    </div>
+    <div class="card">${jobItemsHTML(3)}</div>
+  `;
+}
+
+function renderCareer() {
+  $('mainContent').innerHTML = `
+    <div class="demo-bar">
+      <span class="demo-label">✦ Prototype</span>
+      <button class="demo-btn" onclick="navigateTo('dashboard')">Dashboard</button>
+    </div>
+    <div class="section-title">Career Tools</div>
+    <div class="section-sub">AI-powered instruments for your sovereign professional journey.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      ${careerTool('ATS Analyzer','Upload a resume + job description. AI scores your alignment and suggests edits.','Upload Resume','var(--plum-900)')}
+      ${careerTool('MOU Generator','Draft a Memorandum of Understanding with AI-assisted legal language.','Draft MOU','var(--plum-700)')}
+      ${careerTool('Career Coach','Strategic 1:1 AI coaching session — goals, positioning, next moves.','Start Session','var(--gold-600)')}
+      ${careerTool('Pitch Feedback','Get your incubator pitch reviewed against VC and government frameworks.','Submit Pitch','var(--plum-800)')}
+    </div>
+  `;
+}
+
+function careerTool(title, desc, cta, color) {
+  return `<div class="card" style="border:1.5px solid ${color}20;">
+    <div style="width:40px;height:40px;border-radius:var(--r-xl);background:${color}15;display:flex;align-items:center;justify-content:center;margin-bottom:10px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.8"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg>
+    </div>
+    <div style="font-family:var(--font-display);font-size:17px;font-weight:700;color:var(--text-brand);margin-bottom:5px;">${title}</div>
+    <div style="font-size:12px;color:var(--text-sec);line-height:1.5;margin-bottom:12px;">${desc}</div>
+    <button style="padding:7px 14px;border-radius:var(--r-lg);border:1.5px solid ${color};background:transparent;color:${color};font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-body);transition:all var(--t);" onmouseover="this.style.background='${color}';this.style.color='#fff';" onmouseout="this.style.background='transparent';this.style.color='${color}';">${cta} →</button>
+  </div>`;
+}
+
+function renderSibyl() {
+  $('mainContent').innerHTML = `
+    <div class="demo-bar">
+      <span class="demo-label">✦ Prototype</span>
+      <button class="demo-btn" onclick="navigateTo('dashboard')">Dashboard</button>
+    </div>
+    <div class="section-title">Sibyl Circles</div>
+    <div class="section-sub">Mastermind cohorts, accountability pods, and subcontract threads for sovereign professionals.</div>
+    <div class="card">
+      ${sibylItemsHTML(3)}
+    </div>
+    <div style="margin-top:14px;" class="card">
+      <div class="card-header"><span class="card-title">Your Cohorts</span></div>
+      <div style="text-align:center;padding:24px;color:var(--text-muted);font-size:13px;">
+        <div style="font-size:24px;margin-bottom:8px;">⬡</div>
+        You're not enrolled in any circles yet.<br>
+        <span style="color:var(--plum-600);cursor:pointer;font-weight:600;">Apply to a Sibyl Circle above →</span>
+      </div>
+    </div>
+  `;
+}
+
+function renderIncubator() {
+  $('mainContent').innerHTML = `
+    <div class="demo-bar">
+      <span class="demo-label">✦ Prototype</span>
+      <button class="demo-btn" onclick="navigateTo('dashboard')">Dashboard</button>
+    </div>
+    <div class="section-title">Incubator</div>
+    <div class="section-sub">The Sovereign Circle ecosystem of emerging ventures and co-founders.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      ${pitchCard('Sovereign Stack Labs','Federal compliance SaaS for CMMC 2.0 readiness','MVP','Defense Tech','Co-Founder, Capital','TL')}
+      ${pitchCard('GodMind AI','Coaching platform grounded in the Divine Feminine leadership model','Revenue','AI / Wellness','Capital, Marketing Partner','SA')}
+      ${pitchCard('VetReset Campaign','Veteran reintegration ecosystem for entrepreneurship','Idea','Nonprofit / Gov','Technical Partner, Mentorship','LK')}
+      ${pitchCard('EmpowerFirm OS','AI operations layer for Black Women-led organizations','MVP','AI / Consulting','BD Partner, Investors','SG')}
+    </div>
+  `;
+}
+
+function pitchCard(name, tagline, stage, industry, seeking, init) {
+  const stageColor = {MVP:'var(--plum-600)',Revenue:'var(--success)',Idea:'var(--gold-700)',Scaling:'var(--plum-800)'}[stage]||'var(--text-muted)';
+  return `<div class="card" style="cursor:pointer;" onmouseover="this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.boxShadow=''">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+      <div style="width:36px;height:36px;border-radius:var(--r-lg);background:var(--plum-100);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--plum-800);">${init}</div>
+      <div>
+        <div style="font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--text-brand);">${name}</div>
+        <span style="font-size:10px;font-weight:700;padding:1px 7px;border-radius:var(--r-full);background:${stageColor}18;color:${stageColor};">${stage}</span>
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--text-sec);line-height:1.5;margin-bottom:8px;">${tagline}</div>
+    <div style="font-size:11px;color:var(--text-muted);">📍 ${industry}</div>
+    <div style="font-size:11px;color:var(--plum-700);font-weight:500;margin-top:3px;">Seeking: ${seeking}</div>
+  </div>`;
+}
+
+// ── WIZARD ──────────────────────────────────────────────────────────────────
+
+function openWizard() {
+  wizStep = 1;
+  $('wizardWrap').style.display = 'flex';
+  renderWizard();
+}
+
+function closeWizard() {
+  $('wizardWrap').style.display = 'none';
+}
+
+function renderWizard() {
+  if (wizStep === 'complete') {
+    $('wizardCard').innerHTML = `
+      <div class="complete-screen">
+        <div class="complete-mark">
+          <svg width="56" height="56" viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="28" fill="#3B1A5A"/><path d="M18 28 L25 35 L38 20" stroke="#C9A84C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="complete-title">Your professional infrastructure is set.</div>
+        <div class="complete-sub">Now, align your mindset.</div>
+        <div class="book-cta">
+          <div class="book-face">
+            <div class="book-tit">Unlock the God Mind<br>in the Black Woman</div>
+            <div class="book-auth">Shemmyla Aisha Green, MLS</div>
+          </div>
+          <div class="book-info">
+            <span class="book-badge">FREE Chapter 1</span>
+            <div class="book-headline">Download the first chapter free.</div>
+            <div class="book-desc">A framework for sovereign thinking, aligned action, and operating from your highest intelligence.</div>
+            <button class="btn-gold">⬇ Download Chapter 1 — Free</button>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="closeWizard();navigateTo('dashboard');">Enter Sovereign Circle →</button>
+      </div>`;
+    return;
+  }
+  const stepTitles = {1:"Who are you?",2:"Your expertise",3:"Verify your identity"};
+  const stepDescs = {1:"This is your professional foundation inside Sovereign Circle.",2:"Powers matching in Barter Hub, Job Board, and Sibyl Circles.",3:"LinkedIn verification unlocks full community access."};
+  const skills = ['Project Management','Program Management','Federal Contracting','Business Development','Data Analysis','Product Management','Software Engineering','Cybersecurity','AI / ML','UX Design','Legal Research','DEI Strategy'];
+  const industries = ['Technology','Healthcare','Finance','Legal','Government','Defense & Aerospace','Education','Consulting','Nonprofit','Entrepreneurship'];
+  $('wizardCard').innerHTML = `
+    <div class="wiz-header">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <svg width="28" height="28" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="18" fill="#3B1A5A"/><path d="M18 7 L21.5 14.5 L30 15.5 L24 21.5 L25.5 30 L18 26 L10.5 30 L12 21.5 L6 15.5 L14.5 14.5 Z" fill="#C9A84C"/></svg>
+        <div>
+          <div class="wiz-title">Build your foundation</div>
+          <div class="wiz-sub">Step ${wizStep} of 3</div>
+        </div>
+      </div>
+      <div class="wiz-dots">${[1,2,3].map(n=>`<span class="wiz-dot ${wizStep>=n?'on':''}"></span>`).join('')}</div>
+    </div>
+    <div class="wiz-body">
+      <div class="wiz-step-title">${stepTitles[wizStep]}</div>
+      <div style="font-size:13px;color:var(--text-sec);margin-top:-8px;">${stepDescs[wizStep]}</div>
+      ${wizStep===1?`
+        <div class="form-group">
+          <label class="form-label">Full name <span style="color:var(--error)">*</span></label>
+          <input class="form-input" type="text" placeholder="e.g. Shemmyla Green" value="Shemmyla Aisha Green, MLS"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Location</label>
+          <input class="form-input" type="text" placeholder="e.g. Austin, TX" value="Leander, TX"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Professional bio</label>
+          <textarea class="form-textarea" rows="3" placeholder="Tell the community who you are…">Founder, Empowerment Firm LLC · AI Lab &amp; Think Tank · Program &amp; Project Management · MLS · Digital Sovereignty Advocate</textarea>
+        </div>
+      `:wizStep===2?`
+        <div class="form-group">
+          <label class="form-label">Skills <span style="color:var(--error)">*</span></label>
+          <div class="tag-cloud" id="skillCloud">
+            ${skills.map(s=>`<span class="tag-chip ${selSkills.includes(s)?'sel':''}" onclick="toggleSkill('${s}')">${s}</span>`).join('')}
+          </div>
+        </div>
+        <div class="form-group" style="margin-top:6px;">
+          <label class="form-label">Industries <span style="color:var(--error)">*</span></label>
+          <div class="tag-cloud" id="indCloud">
+            ${industries.map(i=>`<span class="tag-chip ${selIndustries.includes(i)?'sel':''}" onclick="toggleInd('${i}')">${i}</span>`).join('')}
+          </div>
+        </div>
+      `:wizStep===3?`
+        <div class="form-group">
+          <label class="form-label">LinkedIn profile URL</label>
+          <input class="form-input" type="url" placeholder="https://linkedin.com/in/your-profile"/>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:3px;">Must begin with https://linkedin.com/in/</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Referred by a member?</label>
+          <input class="form-input" type="email" placeholder="Referrer's email address"/>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:3px;">A referral speeds up verification review.</div>
+        </div>
+        <div style="display:flex;gap:10px;padding:12px;background:var(--plum-100);border:1px solid var(--plum-200);border-radius:var(--r-lg);font-size:12px;color:var(--plum-800);line-height:1.5;">
+          <span style="flex-shrink:0;margin-top:1px;">ℹ️</span>
+          <span>Your LinkedIn URL is reviewed by our team — never shared publicly or used for contact without your consent.</span>
+        </div>
+      `:''}
+    </div>
+    <div class="wiz-footer">
+      <button class="btn-ghost" onclick="${wizStep>1?'wizBack()':'closeWizard()'}">${wizStep>1?'Back':'Cancel'}</button>
+      <span style="font-size:12px;color:var(--text-muted);font-weight:500;">${wizStep} of 3</span>
+      <button class="btn-primary" onclick="wizNext()">${wizStep===3?'Complete Profile':'Continue →'}</button>
+    </div>`;
+}
+
+function toggleSkill(s) {
+  if(selSkills.includes(s)) selSkills=selSkills.filter(x=>x!==s);
+  else selSkills=[...selSkills,s];
+  document.querySelectorAll('#skillCloud .tag-chip').forEach(el=>{
+    el.classList.toggle('sel',selSkills.includes(el.textContent));
+  });
+}
+function toggleInd(i) {
+  if(selIndustries.includes(i)) selIndustries=selIndustries.filter(x=>x!==i);
+  else selIndustries=[...selIndustries,i];
+  document.querySelectorAll('#indCloud .tag-chip').forEach(el=>{
+    el.classList.toggle('sel',selIndustries.includes(el.textContent));
+  });
+}
+function wizNext() {
+  if(wizStep===3) wizStep='complete';
+  else wizStep++;
+  renderWizard();
+}
+function wizBack() {
+  if(wizStep>1) { wizStep--; renderWizard(); }
+}
+
+// Click outside wizard to close
+$('wizardWrap').addEventListener('click', e => {
+  if(e.target === $('wizardWrap')) closeWizard();
+});
+
+// INIT
+renderDashboard();
+</script>
